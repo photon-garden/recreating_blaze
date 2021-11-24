@@ -1,0 +1,23 @@
+# Call clean_up if the user hits ctrl-c.
+trap clean_up INT
+
+function clean_up() {
+  echo "" &&
+  echo "Cleaning up source directory." &&
+  rm -r src &&
+
+  echo "Restoring source code backup." &&
+  mv src_backup src
+}
+
+echo "Backing up current source code." &&
+mv src src_backup &&
+
+echo "Copying snapshot $1 $2 to source directory." &&
+cp -r snapshots/"$1 $2 $3" src &&
+
+echo "Running snapshot $1 $2." &&
+echo "" &&
+cargo run &&
+
+clean_up
